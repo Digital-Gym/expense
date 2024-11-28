@@ -6,7 +6,7 @@ namespace WAD.Backend._00015641.Services
     {
         Task<IEnumerable<Expense>> GetAllExpensesAsync();
         Task<Expense> GetExpenseByIdAsync(int id);
-        Task<Expense> CreateExpenseAsync(Expense expense);
+        Task<Expense> CreateExpenseAsync(RawExpense expense);
         Task<bool> DeleteExpenseAsync(int id);
     }
 }

@@ -37,10 +37,25 @@ namespace WAD.Backend._00015641.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateExpense([FromBody] Expense expense)
+        public async Task<IActionResult> CreateExpense([FromBody] RawExpense expense)
         {
-            var createdExpense = await _expenseService.CreateExpenseAsync(expense);
-            return CreatedAtAction(nameof(GetExpense), new { id = createdExpense.ExpenseId }, createdExpense);
+            try
+            {
+                var createdExpense = await _expenseService.CreateExpenseAsync(expense);
+                return Ok(CreatedAtAction(nameof(GetExpense), new { id = createdExpense.ExpenseId }, createdExpense));
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while creating the expense.");
+            }
         }
 
         [HttpDelete("{id}")]

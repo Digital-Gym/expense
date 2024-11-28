@@ -22,11 +22,25 @@ public class ExpenseService : IExpenseService
         return await _context.Expenses.FindAsync(id);
     }
 
-    public async Task<Expense> CreateExpenseAsync(Expense expense)
+    public async Task<Expense> CreateExpenseAsync(RawExpense expense)
     {
-        _context.Expenses.Add(expense);
+        if (expense.UserId <= 0 || expense.CategoryId <= 0)
+        {
+            throw new ArgumentException("UserId and CategoryId must be valid.");
+        }
+
+        // shitty code
+        var user = await _context.Users.FindAsync(expense.UserId) ?? throw new KeyNotFoundException($"User with ID {expense.UserId} not found.");
+        var category = await _context.Categories.FindAsync(expense.CategoryId) ?? throw new KeyNotFoundException($"Category with ID {expense.CategoryId} not found.");
+
+        var expenseInstance = expense.getExpenseInstance(user, category);
+
+
+        // save
+        _context.Expenses.Add(expenseInstance);
         await _context.SaveChangesAsync();
-        return expense;
+
+        return expenseInstance;
     }
 
     public async Task<bool> DeleteExpenseAsync(int id)
