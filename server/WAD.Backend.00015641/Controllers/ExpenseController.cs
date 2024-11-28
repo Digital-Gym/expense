@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WAD.Backend._00015641.Data;
 using WAD.Backend._00015641.Models;
+using WAD.Backend._00015641.Services;
 
 namespace WAD.Backend._00015641.Controllers
 {
@@ -10,25 +9,25 @@ namespace WAD.Backend._00015641.Controllers
     public class ExpenseController : ControllerBase
     {
         private readonly ILogger<ExpenseController> _logger;
-        private readonly AppDbContext _context;
+        private readonly IExpenseService _expenseService;
 
-        public ExpenseController(ILogger<ExpenseController> logger, AppDbContext context)
+        public ExpenseController(ILogger<ExpenseController> logger, IExpenseService expenseService)
         {
             _logger = logger;
-            _context = context;
+            _expenseService = expenseService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetExpenses()
         {
-            var expenses = await _context.Expenses.ToListAsync();
+            var expenses = await _expenseService.GetAllExpensesAsync();
             return Ok(expenses);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetExpense(int id)
         {
-            var expense = await _context.Expenses.FindAsync(id);
+            var expense = await _expenseService.GetExpenseByIdAsync(id);
             if (expense == null)
             {
                 _logger.LogWarning("Expense with id {Id} not found", id);
@@ -40,22 +39,19 @@ namespace WAD.Backend._00015641.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateExpense([FromBody] Expense expense)
         {
-            _context.Expenses.Add(expense);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetExpense), new { id = expense.ExpenseId }, expense);
+            var createdExpense = await _expenseService.CreateExpenseAsync(expense);
+            return CreatedAtAction(nameof(GetExpense), new { id = createdExpense.ExpenseId }, createdExpense);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteExpense(int id)
         {
-            var expense = await _context.Expenses.FindAsync(id);
-            if (expense == null)
+            var success = await _expenseService.DeleteExpenseAsync(id);
+            if (!success)
             {
                 _logger.LogWarning("Expense with id {Id} not found", id);
                 return NotFound();
             }
-            _context.Expenses.Remove(expense);
-            await _context.SaveChangesAsync();
             return NoContent();
         }
     }

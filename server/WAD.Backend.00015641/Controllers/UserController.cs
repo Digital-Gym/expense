@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WAD.Backend._00015641.Data;
+using WAD.Backend._00015641.Data.Repositories;
 using WAD.Backend._00015641.Models;
 
 // this controller only for debuggin purposes
@@ -12,18 +11,19 @@ namespace WAD.Backend._00015641.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IUserRepository _userRepository;
 
-        public UserController(AppDbContext context)
+        public UserController(IUserRepository userRepository)
         {
-            _context = context;
+            _userRepository = userRepository;
         }
 
         // GET: api/User
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            var users = await _userRepository.GetAllUsersAsync();
+            return Ok(users);
         }
 
 
@@ -31,7 +31,7 @@ namespace WAD.Backend._00015641.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _userRepository.GetUserByIdAsync(id);
 
             if (user == null)
             {

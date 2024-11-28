@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WAD.Backend._00015641.Data;
+using WAD.Backend._00015641.Data.Repositories;
 using WAD.Backend._00015641.Models;
 
 namespace WAD.Backend._00015641.Controllers
@@ -9,18 +9,18 @@ namespace WAD.Backend._00015641.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly ILogger<AuthenticationController> _logger;
-        private readonly AppDbContext _context;
+        private readonly IUserRepository _userRepository;
 
-        public AuthenticationController(ILogger<AuthenticationController> logger, AppDbContext context)
+        public AuthenticationController(ILogger<AuthenticationController> logger, IUserRepository userRepository)
         {
             _logger = logger;
-            _context = context;
+            _userRepository = userRepository;
         }
 
         [HttpPost("login")]
-        public IActionResult Login(LoginRequest request)
+        public async Task<IActionResult> Login(LoginRequest request)
         {
-            var user = _context.Users.SingleOrDefault(u => u.Name == request.Username);
+            var user = await _userRepository.GetUserByName(request.Username);
 
             if (user == null)
             {
@@ -51,8 +51,7 @@ namespace WAD.Backend._00015641.Controllers
             }
 
             // todo: encrypt password with sha256 or smth (64 bytes long)
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            _userRepository.AddUserAsync(user);
 
             return Ok("User registered successfully");
         }
