@@ -91,5 +91,23 @@ namespace WAD.Backend._00015641.Controllers
             }
             return NoContent();
         }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateExpense(int id, [FromBody] ExpenseUpdateDto updateDto)
+        {
+            try
+            {
+                var updatedExpense = await _expenseService.UpdateExpenseAsync(id, updateDto);
+                return Ok(updatedExpense);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }

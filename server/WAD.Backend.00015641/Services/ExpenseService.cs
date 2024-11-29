@@ -100,4 +100,49 @@ public class ExpenseService : IExpenseService
         await _context.SaveChangesAsync();
         return true;
     }
+
+    public async Task<ExpenseDto> UpdateExpenseAsync(int id, ExpenseUpdateDto updateDto)
+    {
+        var expense = await _context.Expenses.FindAsync(id);
+
+        if (expense == null)
+        {
+            throw new KeyNotFoundException($"Expense with id {id} not found.");
+        }
+
+        // Update only provided fields
+        if (!string.IsNullOrEmpty(updateDto.Title))
+        {
+            expense.Title = updateDto.Title;
+        }
+
+        if (updateDto.Amount.HasValue)
+        {
+            expense.Amount = updateDto.Amount.Value;
+        }
+
+        // validation
+        if (updateDto.CategoryId.HasValue)
+        {
+            var categoryExists = await _context.Categories.AnyAsync(c => c.CategoryId == updateDto.CategoryId.Value);
+            if (!categoryExists)
+            {
+                throw new ArgumentException($"Category with id {updateDto.CategoryId} does not exist.");
+            }
+
+            expense.CategoryId = updateDto.CategoryId.Value;
+        }
+
+        await _context.SaveChangesAsync();
+
+        return new ExpenseDto
+        {
+            ExpenseId = expense.ExpenseId,
+            Title = expense.Title,
+            Amount = expense.Amount,
+            CategoryName = (await _context.Categories.FindAsync(expense.CategoryId))?.Name,
+            CategoryLink = (await _context.Categories.FindAsync(expense.CategoryId))?.Icon,
+            Date = expense.Date
+        };
+    }
 }
