@@ -12,9 +12,54 @@ public class ExpenseService : IExpenseService
         _context = context;
     }
 
-    public async Task<IEnumerable<Expense>> GetAllExpensesAsync()
+    public async Task<IEnumerable<ExpenseDto>> GetAllExpensesAsync(DateTime? startDate, DateTime? finishDate)
     {
-        return await _context.Expenses.ToListAsync();
+        var query = _context.Expenses
+            .Include(e => e.Category)
+            .AsQueryable();
+
+        if (startDate.HasValue)
+        {
+            query = query.Where(e => e.Date >= startDate.Value);
+        }
+
+        if (finishDate.HasValue)
+        {
+            query = query.Where(e => e.Date <= finishDate.Value);
+        }
+
+        return await query
+            .Select(e => new ExpenseDto
+            {
+                ExpenseId = e.ExpenseId,
+                Title = e.Title,
+                Amount = e.Amount,
+                CategoryName = e.Category.Name,
+                CategoryLink = e.Category.Icon,
+                Date = e.Date
+            })
+            .ToListAsync();
+    }
+
+    public async Task<(List<string> labels, List<int> dataset)> GetExpensesStatsAsync(DateTime startDate, DateTime finishDate)
+    {
+        // Filter, group, and aggregate data
+        var stats = await _context.Expenses
+            .Include(e => e.Category)
+            .Where(e => e.Date >= startDate && e.Date <= finishDate) // Filter by date range
+            .GroupBy(e => e.Category.Name) // Group by category name
+            .Select(g => new
+            {
+                Category = g.Key, // Category name
+                TotalAmount = g.Sum(e => e.Amount) // Sum of amounts in this category
+            })
+            .ToListAsync();
+
+        // Separate into labels and dataset
+        var labels = stats.Select(s => s.Category).ToList();
+        var dataset = stats.Select(s => s.TotalAmount).ToList();
+
+        return (labels, dataset);
     }
 
     public async Task<Expense> GetExpenseByIdAsync(int id)

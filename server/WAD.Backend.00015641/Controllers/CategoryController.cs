@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WAD.Backend._00015641.Data;
 using WAD.Backend._00015641.Models;
 
@@ -32,6 +33,12 @@ namespace WAD.Backend._00015641.Controllers
             return CreatedAtAction(nameof(GetCategory), new { id = category.CategoryId }, category);
         }
 
+
+        [HttpGet]
+        public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
+        {
+            return await _context.Categories.ToListAsync();
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCategory(int id)

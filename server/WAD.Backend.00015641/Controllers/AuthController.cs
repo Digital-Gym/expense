@@ -5,13 +5,13 @@ using WAD.Backend._00015641.Models;
 namespace WAD.Backend._00015641.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class AuthenticationController : ControllerBase
+    [Route("api/[controller]")]
+    public class AuthController : ControllerBase
     {
-        private readonly ILogger<AuthenticationController> _logger;
+        private readonly ILogger<AuthController> _logger;
         private readonly IUserRepository _userRepository;
 
-        public AuthenticationController(ILogger<AuthenticationController> logger, IUserRepository userRepository)
+        public AuthController(ILogger<AuthController> logger, IUserRepository userRepository)
         {
             _logger = logger;
             _userRepository = userRepository;

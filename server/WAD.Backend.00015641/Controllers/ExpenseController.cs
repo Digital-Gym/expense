@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WAD.Backend._00015641.Models;
 using WAD.Backend._00015641.Services;
 
 namespace WAD.Backend._00015641.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ExpenseController : ControllerBase
     {
         private readonly ILogger<ExpenseController> _logger;
@@ -17,12 +16,35 @@ namespace WAD.Backend._00015641.Controllers
             _expenseService = expenseService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetExpenses()
+        [HttpGet("history")]
+        public async Task<IActionResult> GetAllExpenses([FromQuery] DateTime? startDate, [FromQuery] DateTime? finishDate)
         {
-            var expenses = await _expenseService.GetAllExpensesAsync();
+            var expenses = await _expenseService.GetAllExpensesAsync(startDate, finishDate);
             return Ok(expenses);
         }
+
+        [HttpGet("stats")]
+        public async Task<IActionResult> GetStats([FromQuery] DateTime startDate, [FromQuery] DateTime finishDate)
+        {
+            // Validate the date range
+            if (finishDate <= startDate)
+            {
+                return BadRequest("Finish date must be greater than start date.");
+            }
+
+            // Fetch stats using service
+            var (labels, dataset) = await _expenseService.GetExpensesStatsAsync(startDate, finishDate);
+
+            // Create the response
+            var response = new
+            {
+                labels,
+                dataset
+            };
+
+            return Ok(response);
+        }
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetExpense(int id)
