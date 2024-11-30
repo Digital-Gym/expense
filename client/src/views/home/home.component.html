@@ -1,3 +1,32 @@
-<h1>home works!</h1>
+<div class="flex w-full justify-content-around pt-8">
+  <div class="card flex justify-content-center">
+    <p-chart 
+      type="doughnut"
+      [data]="data" 
+      [options]="options"
+      [responsive]="true"
+      [width]="'45rem'"
+    />
+    <h1
+      class="absolute top-50 mt-6"
+    >
+      {{ formatCurrency(total) }}
+    </h1>
+  </div>
 
-<p-button label="test" (onClick)="showInfo()"/>
+  <div class="w-4 flex flex-column">
+    <h1>Expenses</h1>
+
+    <ul class="flex flex-column gap-3">
+      @for(category of pairList; track category.label){
+        <li class="flex gap-3 align-items-center">
+          <span 
+            class="w-2rem h-2rem border-1 border-circle surface-border"
+            [style.backgroundColor]="category.color"
+          ></span>
+          {{ category.label }}
+        </li>
+      }
+    </ul>
+  </div>
+</div>
