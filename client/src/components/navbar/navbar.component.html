@@ -27,10 +27,10 @@
       />
     </a>
     </div>
-    <p-button 
-      label="Logout"
-      severity="danger"
+
+    <app-logout 
       class="text-center"
+      (closing)="hideBar()"
     />
   </div>
 </p-sidebar>

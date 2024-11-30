@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from '../components/navbar/navbar.component';
+import { AuthService } from '../services/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -13,5 +14,9 @@ import { NavbarComponent } from '../components/navbar/navbar.component';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'client';
+  constructor(private auth: AuthService){}
+
+  isAuth(){
+    return this.auth.isAuthed();
+  }
 }

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { SidebarModule } from 'primeng/sidebar';
 import { ButtonModule } from 'primeng/button';
 import { RouterLink } from '@angular/router';
+import { LogoutComponent } from '../logout/logout.component';
 
 
 @Component({
@@ -10,7 +11,8 @@ import { RouterLink } from '@angular/router';
   imports: [
     ButtonModule,
     SidebarModule,
-    RouterLink
+    RouterLink,
+    LogoutComponent
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',

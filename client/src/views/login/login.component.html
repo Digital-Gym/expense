@@ -1,1 +1,32 @@
-<p>login works!</p>
+ 
+<div class="flex flex-column h-full align-items-center text-center justify-content-center">
+  <div class="flex flex-column border-1 w-min gap-3 px-6 py-6 border-round surface-border">
+    <h2 class="mb-3 mt-0">Login</h2>
+  
+    <p-iconField iconPosition="left">
+      <p-inputIcon styleClass="pi pi-user" />
+      <input 
+        [(ngModel)]="username"
+        type="text"
+        pInputText 
+        placeholder="Your name"
+      />
+    </p-iconField>
+  
+    <p-iconField iconPosition="left">
+      <p-inputIcon styleClass="pi pi-lock" />
+      <input 
+        [(ngModel)]="pass"
+        type="password"
+        pInputText 
+        placeholder="Password"
+      />
+    </p-iconField>
+  
+    <p-button 
+      class="mt-8"
+      label="Submit"
+      (onClick)="submit()"
+    />
+  </div>
+</div>
