@@ -36,7 +36,15 @@ namespace WAD.Backend._00015641.Controllers
 
             // on success
             _logger.LogInformation("User {Username} logged in successfully", request.Username);
-            return Ok("Login successful");
+
+            var success = true;
+            var result = new
+            {
+                success,
+                user
+            };
+
+            return Ok(result);
         }
 
 
