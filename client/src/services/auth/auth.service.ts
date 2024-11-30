@@ -14,8 +14,6 @@ export class AuthService {
     const storage = localStorage.getItem('expenseAuth');
     this.userName = storage ? JSON.parse(storage).name : '';
     this.id = storage ? JSON.parse(storage).id : '';
-
-    this.test();
   }
 
   async login(name: string, password: string){
@@ -44,11 +42,6 @@ export class AuthService {
     localStorage.removeItem("expenseAuth");
     this.userName = '';
     this.id = 0;
-  }
-
-  async test(){
-    const temp = await axios.get(`${URL}/api/Expense/history`);
-    console.log(temp.data);
   }
 
   getName(){
