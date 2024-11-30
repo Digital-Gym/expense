@@ -19,6 +19,7 @@ namespace WAD.Backend._00015641.Services
                 Title = Title,
                 Amount = Amount,
                 UserId = UserId,
+                Date = Date,
                 User = user,
                 Category = category
             };
