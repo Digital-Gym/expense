@@ -15,7 +15,10 @@
   </div>
 
   <div class="w-4 flex flex-column">
-    <h1>Expenses</h1>
+    <div class="flex gap-3 align-items-center">
+      <h1>Expenses</h1>
+      <p-button icon="pi pi-refresh" [rounded]="true" (onClick)="refresh()" />
+    </div>
 
     <ul class="flex flex-column gap-3">
       @for(category of pairList; track category.label){

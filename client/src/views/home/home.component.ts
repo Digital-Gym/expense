@@ -39,14 +39,19 @@ export class HomeComponent {
       }
 
       this.pairList = this.getAggregated(stats.labels, [...colors]);
-      this.total = stats.dataset.reduce((a:number, b:number)=>a + b);
+
+      if(stats.dataset.length > 0){
+        this.total = stats.dataset.reduce((a:number, b:number)=>a + b);
+      } else{
+        this.total = 0;
+      }
 
       this.data = {
-        labels: stats.labels,
+        labels: stats.labels.length > 0 ? stats.labels : ['No values'],
         datasets: [
             {
-              data: stats.dataset,
-              backgroundColor: [...colors]
+              data: stats.dataset.length > 0 ? stats.dataset : [1],
+              backgroundColor: stats.dataset.length > 0 ?[...colors] : 'gray'
             }
         ]
       };
@@ -88,5 +93,10 @@ export class HomeComponent {
     });
 
     return result;
+  }
+
+  refresh(){
+    console.log("JERE")
+    this.ngOnInit();
   }
 }
