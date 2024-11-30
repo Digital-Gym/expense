@@ -1,0 +1,52 @@
+<p-sidebar [(visible)]="sidebarVisible">
+  <div class="flex flex-column justify-content-between min-h-full">
+    <div class="flex flex-column gap-3">
+      <h2>Welcome!</h2>
+      <a 
+        routerLink=""
+      >
+        <p-button
+          icon="pi pi-home"
+          iconPos="left"
+          label="Home"
+          [text]="true"
+          severity="secondary"
+          (onClick)="hideBar()"
+        />
+      </a>
+      <a 
+        routerLink="/history"
+      >
+      <p-button
+        icon="pi pi-history"
+        iconPos="left"
+        label="History"
+        [text]="true"
+        severity="secondary"
+        (onClick)="hideBar()"
+      />
+    </a>
+    </div>
+    <p-button 
+      label="Logout"
+      severity="danger"
+      class="text-center"
+    />
+  </div>
+</p-sidebar>
+
+<!-- the bar itself -->
+<div class="w-full flex justify-content-between px-5 py-2">
+  <p-button 
+    (onClick)="showBar()"
+    icon="pi pi-bars"
+    [text]="true"
+    size="large"
+  />
+
+  <p-button 
+    label="Add"
+    severity="success"
+    size="large"
+  />
+</div>
