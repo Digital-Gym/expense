@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\WAD.Backend.00015641.props" />
+</Project>
