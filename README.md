@@ -1,6 +1,6 @@
 This application was developed for the Web Application module, as coursework portfolio project @ WIUT by student ID: 00015641
 
-## Expense Manager
+## 💸Expense Manager | [📹DEMO](https://youtu.be/Vzr7Hz-AXfk)
 
 - [Introduction](#introduction)
 - [Technologies Used](#technologies-used)
