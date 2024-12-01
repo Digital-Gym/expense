@@ -58,12 +58,21 @@
 
   <p-calendar [(ngModel)]="api.date" selectionMode="range" />
 
-  <p-button 
-    label="Add"
-    severity="success"
-    size="large"
-    (onClick)="showDialog()"
-  />
+  <div class="flex gap-3">
+    <p-button 
+      label="Category"
+      severity="primary"
+      size="large"
+      [outlined]="true"
+      (onClick)="showCategoryDialog()"
+    />
+    <p-button 
+      label="Add"
+      severity="success"
+      size="large"
+      (onClick)="showDialog()"
+    />
+  </div>
 </div>
 
 
@@ -98,6 +107,7 @@
         placeholder="Select a category" 
         class="flex-auto"
         [style]="{width: '100%'}"
+        [scrollHeight]="'150px'"
       />
     </div>
 
@@ -107,3 +117,28 @@
     </div>
   </p-dialog>
 </div>
+
+<p-dialog 
+  header="Create a category"
+  [modal]="true"
+  [(visible)]="cvisible"
+  >
+  <div class="flex align-items-center gap-3 mb-3">
+      <label for="cname" class="font-semibold w-6rem">Name</label>
+      <input pInputText id="cname" class="flex-auto" autocomplete="off" [(ngModel)]="cname"/>
+  </div>
+  <div class="flex align-items-center gap-3 mb-5">
+      <label for="cicon" class="font-semibold w-6rem">Icon</label>
+      <input 
+        pInputText id="cicon"
+        class="flex-auto"
+        autocomplete="off"
+        [(ngModel)]="cicon"
+      />
+  </div>
+
+  <div class="flex justify-content-end gap-2 mt-8 pt-4">
+      <p-button label="Cancel" severity="secondary" (onClick)="visible = false" />
+      <p-button label="Create" (onClick)="handleCategoryCreate()" />
+  </div>
+</p-dialog>

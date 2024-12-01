@@ -1,15 +1,20 @@
+<p-toast position="bottom-right" />
 <div class="flex w-full h-7 pt-8 justify-content-center">
   <div class="w-6">
-    <h1>History</h1>
+    <div class="flex gap-3 align-items-center">
+      <h1>History</h1>
+      <p-button icon="pi pi-refresh" [rounded]="true" (onClick)="refresh()" />
+    </div>
     <!-- expense list -->
     <div class="flex flex-column gap-3">
       @for(expense of expenses; track expense.expenseId){
         <div 
           class="
-            flex align-items-center border-1 border-round px-4 py-2
+            flex align-items-center border-2 border-round px-4 py-2
             expenseCard justify-content-between
             "
           [style.borderColor]="getColor(expense.categoryName)"
+          (click)="showDialog(expense)"
         >
           <div class="flex align-items-center gap-3">
             <img
@@ -24,3 +29,47 @@
     </div>
   </div>
 </div>
+
+
+<p-dialog 
+  header="Edit an expense"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '25rem', height: '25rem'}"
+  >
+  <div class="flex align-items-center gap-3 mb-3">
+      <label for="title" class="font-semibold w-6rem">Title</label>
+      <input pInputText id="title" class="flex-auto" autocomplete="off" [(ngModel)]="title"/>
+  </div>
+  <div class="flex align-items-center gap-3 mb-5">
+      <label for="amount" class="font-semibold w-6rem">Amount</label>
+      <p-inputNumber 
+        id="amount"
+        inputId="integeronly" 
+        class="flex-auto"
+        autocomplete="off"
+        [style]="{width: '100%'}"
+        [(ngModel)]="amount"
+      />
+  </div>
+  <div class="flex align-items-center gap-3 mb-8">
+    <label for="amount" class="font-semibold w-6rem">Category</label>
+    <p-dropdown 
+      [options]="hcategories" 
+      [(ngModel)]="selectedCategory" 
+      optionLabel="name"
+      placeholder="Select a category" 
+      class="flex-auto"
+      [style]="{width: '100%'}"
+      [scrollHeight]="'150px'"
+    />
+  </div>
+
+  <div class="flex justify-content-between gap-2 mt-8 pt-4">
+      <p-button label="Cancel" severity="secondary" (onClick)="visible = false" />
+      <div class="flex gap-3">
+        <p-button label="Update" severity="info" (onClick)="handleUpdate()" />
+        <p-button label="Delete" severity="danger" (onClick)="handleDelete()" />
+      </div>
+  </div>
+</p-dialog>

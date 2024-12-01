@@ -77,4 +77,45 @@ export class ApiService {
       console.error(err);
     }
   }
+
+  async deleteExpense(id: number){
+    try{
+      await axios.delete(`${URL}/api/Expense/${id}`);
+      return true;
+    } catch(err){
+      console.error(err);
+      return false;
+    }
+  }
+
+  async updateExpense(expenseId: number, title: string, amount: number, categoryId: number){
+    try{
+      const res = await axios.patch(`${URL}/api/Expense/${expenseId}`, {
+        title,
+        amount,
+        categoryId
+      });
+
+      if(res && res.data){
+        return res.data;
+      }
+    } catch(err){
+      console.error(err);
+    }
+  }
+
+  async createCategory(name: string, icon: string){
+    try{
+      const res = await axios.post(`${URL}/api/Category`, {
+        name,
+        icon
+      });
+
+      if(res && res.data){
+        return res.data;
+      }
+    } catch(err){
+      console.error(err);
+    }
+  }
 }

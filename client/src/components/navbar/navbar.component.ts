@@ -46,18 +46,22 @@ interface Category{
 export class NavbarComponent {
   sidebarVisible = false;
   visible: boolean = false;
+  cvisible: boolean = false;
   categories: Category[] | undefined;
   selectedCategory: Category | undefined;
   title: string | undefined;
   amount: number | undefined;
+  cname: string | undefined;
+  cicon: string | undefined;
 
   constructor(public api: ApiService, private messageService: MessageService, private auth: AuthService){}
 
-  async ngOnInit() {
+  async fetchCategories(){
     this.categories = await this.api.getCategories();
   }
 
-  showDialog() {
+  async showDialog() {
+    await this.fetchCategories();
     this.visible = true;
   }
 
@@ -87,5 +91,24 @@ export class NavbarComponent {
 
   getName(){
     return this.auth.getName();
+  }
+
+  showCategoryDialog(){
+    this.cvisible = true;
+  }
+
+  async handleCategoryCreate(){
+    if(this.cname && this.cicon){
+      const res = await this.api.createCategory(this.cname, this.cicon);
+
+      if(res){
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Category has been added' });
+        this.cvisible = false;
+        return;
+      }
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Went wrong!' });
+      return;
+    }
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Category name and icon must be filled!' });
   }
 }
