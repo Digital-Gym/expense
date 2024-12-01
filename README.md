@@ -1,4 +1,7 @@
 This application was developed for the Web Application module, as coursework portfolio project @ WIUT by student ID: 00015641
+---
+
+15641 % 20 = 1, therfore the topic is *Expense Manager*
 
 ## 💸Expense Manager | [📹DEMO](https://youtu.be/Vzr7Hz-AXfk)
 
