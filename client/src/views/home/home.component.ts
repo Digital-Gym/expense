@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { ApiService } from '../../services/api/api.service';
 import { ChartModule } from 'primeng/chart';
+import { randomColor, formatCurrency } from '../../misc/utils';
 
 interface CategoryLabel{
   label: string;
@@ -15,6 +16,7 @@ interface CategoryLabel{
     ButtonModule,
     ChartModule
   ],
+  
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -23,6 +25,7 @@ export class HomeComponent {
   options: any;
   total: number | undefined;
   pairList: CategoryLabel[] | undefined;
+  formatCurrency = formatCurrency;
 
   constructor(private api: ApiService){}
 
@@ -35,7 +38,7 @@ export class HomeComponent {
       const colors: Set<string> = new Set();
       
       while(stats.labels.length != colors.size){
-        colors.add(this.randomColor());
+        colors.add(randomColor());
       }
 
       this.pairList = this.getAggregated(stats.labels, [...colors]);
@@ -57,6 +60,7 @@ export class HomeComponent {
       };
     }
 
+
     this.options = {
       cutout: '60%',
         plugins: {
@@ -67,21 +71,6 @@ export class HomeComponent {
           }
         }
     };
-  }
-
-  randomColor(){
-    const r = Math.floor(Math.random() * 255);
-    const g = Math.floor(Math.random() * 255);
-    const b = Math.floor(Math.random() * 255);
-
-    return `rgb(${r},${g},${b})`;
-  }
-
-  public formatCurrency(value: number | undefined){
-    if(value){
-      return value.toLocaleString('en-US').replace(/,/g, ' ');
-    }
-    return 0;
   }
 
   getAggregated(labels: string[], colors: string[]){

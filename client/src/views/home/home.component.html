@@ -20,16 +20,16 @@
       <p-button icon="pi pi-refresh" [rounded]="true" (onClick)="refresh()" />
     </div>
 
-    <ul class="flex flex-column gap-3">
+    <div class="flex flex-column gap-3 align-items-left">
       @for(category of pairList; track category.label){
         <li class="flex gap-3 align-items-center">
           <span 
             class="w-2rem h-2rem border-1 border-circle surface-border"
             [style.backgroundColor]="category.color"
           ></span>
-          {{ category.label }}
+          <p class="m-0 text-xl">{{ category.label }}</p>
         </li>
       }
-    </ul>
+    </div>
   </div>
 </div>

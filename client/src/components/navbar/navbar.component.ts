@@ -12,6 +12,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DropdownModule } from 'primeng/dropdown';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { AvatarModule } from 'primeng/avatar';
+import { AuthService } from '../../services/auth/auth.service';
 
 interface Category{
   categoryId: number;
@@ -33,7 +35,8 @@ interface Category{
     InputTextModule,
     InputNumberModule,
     DropdownModule,
-    ToastModule
+    ToastModule,
+    AvatarModule
   ],
   providers: [MessageService],
   templateUrl: './navbar.component.html',
@@ -48,7 +51,7 @@ export class NavbarComponent {
   title: string | undefined;
   amount: number | undefined;
 
-  constructor(public api: ApiService, private messageService: MessageService){}
+  constructor(public api: ApiService, private messageService: MessageService, private auth: AuthService){}
 
   async ngOnInit() {
     this.categories = await this.api.getCategories();
@@ -76,5 +79,13 @@ export class NavbarComponent {
 
   showBar(){
     this.sidebarVisible = true;
+  }
+
+  getLetter(){
+    return this.auth.getName()[0];
+  }
+
+  getName(){
+    return this.auth.getName();
   }
 }

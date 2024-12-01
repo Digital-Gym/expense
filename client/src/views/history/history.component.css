@@ -1,0 +1,4 @@
+.expenseCard:hover{
+  transform: scale(1.05);
+  transition: .3s ease;
+}

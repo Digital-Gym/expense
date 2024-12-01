@@ -1,1 +1,26 @@
-<p>history works!</p>
+<div class="flex w-full h-7 pt-8 justify-content-center">
+  <div class="w-6">
+    <h1>History</h1>
+    <!-- expense list -->
+    <div class="flex flex-column gap-3">
+      @for(expense of expenses; track expense.expenseId){
+        <div 
+          class="
+            flex align-items-center border-1 border-round px-4 py-2
+            expenseCard justify-content-between
+            "
+          [style.borderColor]="getColor(expense.categoryName)"
+        >
+          <div class="flex align-items-center gap-3">
+            <img
+              [src]="getLink(expense.categoryLink)" 
+              class="w-2rem h-2rem"
+            />
+            <p class="text-xl">{{ expense.title }}</p>
+          </div>
+          <p class="text-xl">{{ formatCurrency(expense.amount) }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</div>
