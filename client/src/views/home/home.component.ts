@@ -85,7 +85,6 @@ export class HomeComponent {
   }
 
   refresh(){
-    console.log("JERE")
     this.ngOnInit();
   }
 }
